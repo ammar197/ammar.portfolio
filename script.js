@@ -288,34 +288,18 @@ function animateOnScroll() {
 window.addEventListener('load', animateOnScroll);
 
 
-
-// تأثير عد الإحصائيات
-function animateStats() {
+// كود عرض الإحصائيات مباشرة بدون عد تنازلي
+function showStats() {
     const statItems = document.querySelectorAll('.stat-item h3');
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const target = +entry.target.getAttribute('data-count');
-                const count = +entry.target.textContent;
-                const increment = target / 100;
-                
-                if (count < target) {
-                    entry.target.textContent = Math.ceil(count + increment);
-                    setTimeout(animateStats, 10);
-                } else {
-                    entry.target.textContent = target;
-                }
-            }
-        });
-    }, { threshold: 0.5 });
-    
     statItems.forEach(item => {
-        observer.observe(item);
+        const target = item.getAttribute('data-count');
+        item.textContent = target; // يحط الرقم مباشرة
     });
 }
 
-window.addEventListener('load', animateStats);
+// شغل الكود لما الموقع يفتح
+window.addEventListener('load', showStats);
 
 
 // تسجيل Service Worker

@@ -287,19 +287,34 @@ function animateOnScroll() {
 
 window.addEventListener('load', animateOnScroll);
 
-
-// كود عرض الإحصائيات مباشرة بدون عد تنازلي
-function showStats() {
+// تأثير عد الإحصائيات
+function animateStats() {
     const statItems = document.querySelectorAll('.stat-item h3');
     
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = +entry.target.getAttribute('data-count');
+                const count = +entry.target.textContent;
+                const increment = target / 100;
+                
+                if (count < target) {
+                    entry.target.textContent = Math.ceil(count + increment);
+                    setTimeout(animateStats, 10);
+                } else {
+                    entry.target.textContent = target;
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+    
     statItems.forEach(item => {
-        const target = item.getAttribute('data-count');
-        item.textContent = target; // يحط الرقم مباشرة
+        observer.observe(item);
     });
 }
 
-// شغل الكود لما الموقع يفتح
-window.addEventListener('load', showStats);
+window.addEventListener('load', animateStats);
+
 
 
 // تسجيل Service Worker
